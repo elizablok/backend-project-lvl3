@@ -12,4 +12,4 @@ export const getFilename = (url) => {
   const { hostname, pathname } = baseUrl;
   const rawFilename = path.join(hostname, pathname);
   return `${prettifyFilename(rawFilename)}.html`;
-}
+};
