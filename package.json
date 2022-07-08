@@ -1,0 +1,42 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "[![Actions Status](https://github.com/elizablok/backend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/elizablok/backend-project-lvl3/actions)",
+  "main": "index.js",
+  "bin": {
+    "page-loader": "bin/index.js"
+  },
+  "scripts": {
+    "test": "npx jest --bail"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elizablok/backend-project-lvl3.git"
+  },
+  "author": "elizablok",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elizablok/backend-project-lvl3/issues"
+  },
+  "homepage": "https://github.com/elizablok/backend-project-lvl3#readme",
+  "dependencies": {
+    "@hexlet/code": "file:hexlet-code-1.0.0.tgz",
+    "axios": "^0.27.2",
+    "commander": "^9.3.0",
+    "fs.promises": "^0.1.2",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "asyncawait": "^3.0.0",
+    "eslint": "^8.19.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^26.5.3",
+    "jest": "^28.1.2",
+    "jest-cli": "^28.1.2",
+    "nock": "^13.2.8",
+    "npx": "^10.2.2"
+  }
+}
