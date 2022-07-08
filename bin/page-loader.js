@@ -13,6 +13,7 @@ program
   .arguments('<url>')
   .action((url) => {
     const options = program.opts();
-    console.log(loadPage(url, options.output));
+    loadPage(url, options.output)
+    .then((filepath) => console.log(`Page was successfully downloaded into '${filepath}'`));
   })
   .parse(process.argv);

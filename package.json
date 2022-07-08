@@ -25,6 +25,7 @@
     "axios": "^0.27.2",
     "commander": "^9.3.0",
     "fs.promises": "^0.1.2",
+    "lodash": "^4.17.21",
     "path": "^0.12.7"
   },
   "devDependencies": {
