@@ -13,5 +13,7 @@ rules: {
   import/extensions: 0,
   no-underscore-dangle: [
     2, { "allow": ["__filename", "__dirname"] }
-  ]
+  ],
+  no-useless-escape: 0,
+  func-names: 0
 }

@@ -2,39 +2,46 @@ import nock from 'nock';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import os from 'os';
-import fs from 'fs.promises';
+import fsp from 'fs/promises';
 import loadPage from '../src/pageLoader.js';
-import { getFilename } from '../src/pathUtils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const getFixturePath = (name) => path.join(__dirname, '..', '__fixtures__', name);
-const readFile = (filepath) => fs.readFile(filepath, 'utf-8');
-const getLoadingPath = (dirname, filename) => path.join(dirname, filename);
+const readFile = (dir, file) => fsp.readFile(path.join(dir, file));
+const getPath = (dirname, filename) => path.join(dirname, filename);
 
 const receivedLink = 'https://ru.hexlet.io/courses';
-const receivedUrl = new URL(receivedLink);
-const receivedUrlOrigin = receivedUrl.origin;
-const receivedUrlPath = receivedUrl.pathname;
+const receivedPageFilename = 'ru-hexlet-io-courses.html';
+const receivedFilesDirname = 'ru-hexlet-io-courses_files';
+const receivedPictureFilename = 'ru-hexlet-io-assets-professions-nodejs.png';
 
-const expectedPageFilename = 'index.html';
-const expectedPagePath = getFixturePath(expectedPageFilename);
-
-let expectedPageContent;
+let expectedPageBefore;
+let expectedPageAfter;
+let expectedFiles;
 beforeAll(async () => {
-  expectedPageContent = await readFile(expectedPagePath).then((data) => data.trim());
+  expectedPageBefore = await fsp.readFile(getFixturePath('before.html'));
+  expectedPageAfter = await fsp.readFile(getFixturePath('after.html'));
+  expectedFiles = {
+    picture: await fsp.readFile(getFixturePath('picture.png')),
+  };
 });
 
 let receivedPageDirname;
 beforeEach(async () => {
-  receivedPageDirname = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'));
+  receivedPageDirname = await fsp.mkdtemp(path.join(os.tmpdir(), 'page-loader-'));
 });
 
-test('loaded content correctly', async () => {
-  const receivedPageFilename = getFilename(receivedLink);
-  const receivedPagePath = getLoadingPath(receivedPageDirname, receivedPageFilename);
-  nock(receivedUrlOrigin).get(receivedUrlPath).reply(200, expectedPageContent);
+test('loaded picture', async () => {
+  nock('https://ru.hexlet.io')
+    .get('/courses')
+    .reply(200, expectedPageBefore)
+    .get('/assets/professions/nodejs.png')
+    .reply(200, expectedFiles.picture);
   await loadPage(receivedLink, receivedPageDirname);
-  const receivedPageContent = await readFile(receivedPagePath).then((data) => data.trim());
-  expect(receivedPageContent).toEqual(expectedPageContent);
+  const receivedPage = await readFile(receivedPageDirname, receivedPageFilename);
+  const receivedPictirePath = getPath(receivedFilesDirname, receivedPictureFilename);
+  const receivedPicture = await readFile(receivedPageDirname, receivedPictirePath);
+  expect(receivedPage).toEqual(expectedPageAfter);
+  expect(receivedPicture).toEqual(expectedFiles.picture);
 });
