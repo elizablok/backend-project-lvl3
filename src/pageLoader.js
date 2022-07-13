@@ -11,7 +11,7 @@ function loadHtmlPage(url, outputPath) {
 }
 
 function loadResources(resourcesLinks, resourcesPath, mainUrl) {
-  return resourcesLinks.forEach((link) => {
+  const promises = resourcesLinks.map((link) => {
     const newLink = getAbsoluteUrl(mainUrl, link);
     const dataType = getDataType(newLink);
     const filename = getDataName(newLink, 'file');
@@ -19,6 +19,7 @@ function loadResources(resourcesLinks, resourcesPath, mainUrl) {
     return axios.get(newLink, { responseType: dataType })
       .then((response) => fsp.writeFile(filepath, response.data));
   });
+  return Promise.all(promises);
 }
 
 function adaptHtmlPage(htmlPagePath, mainUrl) {
