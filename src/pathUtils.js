@@ -11,7 +11,8 @@ const mappingDataName = {
   page: (pathname) => `${prettifyFilename(pathname)}.html`,
   file: (pathname) => {
     const { dir, name, ext } = path.parse(pathname);
-    return `${prettifyFilename(getPath(dir, name))}${ext}`;
+    const newExt = ext === '' ? '.html' : ext;
+    return `${prettifyFilename(getPath(dir, name))}${newExt}`;
   },
   folder: (pathname) => `${prettifyFilename(pathname)}_files`,
 };
