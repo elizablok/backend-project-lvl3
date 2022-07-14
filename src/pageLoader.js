@@ -3,6 +3,7 @@ import fsp from 'fs/promises';
 import path from 'path';
 import debug from 'debug';
 import axiosDebug from 'axios-debug-log';
+import Listr from 'listr';
 import { getDataName, getPath } from './pathUtils.js';
 import { getResourcesLinks, localizeLinks, normalizeHtml } from './pageProcessors.js';
 
@@ -36,17 +37,31 @@ function loadHtmlPage(url, outputPath) {
 function loadResources(resourcesLinks, resourcesPath, pageUrl) {
   const resourcesToLocalize = [];
   const resourcesDirname = path.basename(resourcesPath);
-  const promises = resourcesLinks.map((link) => {
-    const newLink = new URL(link, pageUrl).href;
-    const filename = getDataName(newLink, 'file');
-    const relativePath = getPath(resourcesDirname, filename);
-    const filepath = getPath(resourcesPath, filename);
-    return axios.get(newLink, { responseType: 'arraybuffer' })
-      .then(({ data }) => fsp.writeFile(filepath, data))
-      .catch((e) => handleError(e))
-      .then(() => resourcesToLocalize.push([link, relativePath]));
-  });
-  return Promise.all(promises)
+  const tasks = new Listr(
+    resourcesLinks
+      .map((link) => {
+        const newLink = new URL(link, pageUrl).href;
+        const filename = getDataName(newLink, 'file');
+        const relativePath = getPath(resourcesDirname, filename);
+        const filepath = getPath(resourcesPath, filename);
+        const task = axios({
+          method: 'get',
+          url: newLink,
+          responseType: 'arraybuffer',
+        })
+          .then(({ data }) => {
+            log(`Saving file ${filepath}`);
+            return fsp.writeFile(filepath, data);
+          })
+          .catch((e) => handleError(e))
+          .then(() => resourcesToLocalize.push([link, relativePath]));
+
+        return { title: newLink, task: () => task };
+      }),
+  );
+
+  return Promise.resolve([])
+    .then(() => tasks.run())
     .then(() => resourcesToLocalize);
 }
 
