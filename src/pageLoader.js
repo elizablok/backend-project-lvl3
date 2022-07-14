@@ -8,6 +8,7 @@ import { getDataName, getPath } from './pathUtils.js';
 import { getResourcesLinks, localizeLinks, normalizeHtml } from './pageProcessors.js';
 
 const log = debug('page-loader');
+const isDebugEnv = process.env.DEBUG;
 
 function handleError(e) {
   if (e.response) {
@@ -58,6 +59,11 @@ function loadResources(resourcesLinks, resourcesPath, pageUrl) {
 
         return { title: newLink, task: () => task };
       }),
+    {
+      concurrent: true,
+      renderer: isDebugEnv ? 'silent' : 'default',
+      exitOnError: false,
+    },
   );
 
   return Promise.resolve([])

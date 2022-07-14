@@ -15,5 +15,6 @@ rules: {
     2, { "allow": ["__filename", "__dirname"] }
   ],
   no-useless-escape: 0,
-  func-names: 0
+  func-names: 0,
+  consistent-return: 0,
 }
