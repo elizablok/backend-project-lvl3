@@ -28,7 +28,8 @@ export function getResourcesLinks(content, url) {
     const tagLinks = $(tag).map(function () {
       const tagAttr = tagAttrs.filter((el) => $(this).attr(el)).join('');
       return $(this).attr(tagAttr);
-    }).toArray().filter((el) => hasSameDomain(url, new URL(el, url).href));
+    }).toArray()
+      .filter((el) => hasSameDomain(url, new URL(el, url).href));
     acc.push(...tagLinks);
     return acc;
   }, []);

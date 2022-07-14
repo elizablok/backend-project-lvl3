@@ -14,6 +14,10 @@ program
   .action((url) => {
     const options = program.opts();
     loadPage(url, options.output)
-      .then((filepath) => console.log(`Page was successfully downloaded into '${filepath}'`));
+      .then((filepath) => console.log(`Page was successfully downloaded into '${filepath}'`))
+      .catch((e) => {
+        console.error(e.message);
+        process.exit(1);
+      });
   })
   .parse(process.argv);

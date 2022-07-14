@@ -23,11 +23,13 @@
   "dependencies": {
     "@hexlet/code": "file:hexlet-code-1.0.0.tgz",
     "axios": "^0.27.2",
+    "axios-debug-log": "^0.8.4",
     "cheerio": "^1.0.0-rc.12",
     "commander": "^9.3.0",
+    "debug": "^4.3.4",
     "lodash": "^4.17.21",
     "path": "^0.12.7",
-    "prettier": "^2.7.1"
+    "winston": "^3.8.1"
   },
   "devDependencies": {
     "asyncawait": "^3.0.0",

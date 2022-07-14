@@ -61,3 +61,26 @@ test('loaded picture', async () => {
   expect(receivedPng).toEqual(expectedResources.png);
   expect(receivedJs).toEqual(expectedResources.js);
 });
+
+describe('Should trow errors', () => {
+  test('Http errors', async () => {
+    nock('https://foo.bar.baz')
+      .get(/404/)
+      .reply(404)
+      .get(/500/)
+      .reply(500);
+
+    await expect(loadPage('https://foo.bar.baz/404', receivedDirname)).rejects.toThrow('\'https://foo.bar.baz/404\' request failed with status code 404');
+    await expect(loadPage('https://foo.bar.baz/500', receivedDirname)).rejects.toThrow('\'https://foo.bar.baz/500\' request failed with status code 500');
+  });
+
+  test('Fs errors', async () => {
+    nock(/example.com/)
+      .get('/')
+      .twice()
+      .reply(200);
+
+    await expect(loadPage('https://example.com', '/sys')).rejects.toThrow('EACCES: permission denied, open \'/sys/example-com.html\'');
+    await expect(loadPage('https://example.com', '/notExistingFolder')).rejects.toThrow('ENOENT: no such file or directory, open \'/notExistingFolder/example-com.html\'');
+  });
+});

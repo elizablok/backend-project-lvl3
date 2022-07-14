@@ -2,19 +2,19 @@ import path from 'path';
 
 export const getPath = (outputPath, filename) => path.join(outputPath, filename);
 
-const prettifyFilename = (filepath) => filepath
+const prettifyName = (filepath) => filepath
   .replace(/\/$/, '')
   .replace(/\.html$/, '')
   .replace(/[^a-z\d]/gi, '-');
 
 const mappingDataName = {
-  page: (pathname) => `${prettifyFilename(pathname)}.html`,
+  page: (pathname) => `${prettifyName(pathname)}.html`,
   file: (pathname) => {
     const { dir, name, ext } = path.parse(pathname);
     const newExt = ext === '' ? '.html' : ext;
-    return `${prettifyFilename(getPath(dir, name))}${newExt}`;
+    return `${prettifyName(getPath(dir, name))}${newExt}`;
   },
-  folder: (pathname) => `${prettifyFilename(pathname)}_files`,
+  folder: (pathname) => `${prettifyName(pathname)}_files`,
 };
 
 export const getDataName = (url, dataType) => {
