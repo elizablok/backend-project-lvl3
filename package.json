@@ -8,7 +8,7 @@
     "page-loader": "bin/index.js"
   },
   "scripts": {
-    "test": "npx jest --bail"
+    "test": "DEBUG=* npx jest --bail"
   },
   "repository": {
     "type": "git",
@@ -29,8 +29,7 @@
     "debug": "^4.3.4",
     "listr": "^0.14.3",
     "lodash": "^4.17.21",
-    "path": "^0.12.7",
-    "winston": "^3.8.1"
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "asyncawait": "^3.0.0",

@@ -8,11 +8,13 @@ import { getDataName, getPath } from './pathUtils.js';
 import { getResourcesLinks, localizeLinks, normalizeHtml } from './pageProcessors.js';
 
 const log = debug('page-loader');
-const isDebugEnv = process.env.DEBUG;
 
 function handleError(e) {
-  if (e.response) {
-    throw new Error(`'${e.config.url}' request failed with status code ${e.response.status}`);
+  if (e.isAxiosError) {
+    if (e.response) {
+      throw new Error(`'${e.config.url}' request failed with status code ${e.response.status}`);
+    }
+    throw new Error(`The request was made at ${e.config.url} but no response was received`);
   }
   throw e;
 }
@@ -51,7 +53,7 @@ function loadResources(resourcesLinks, resourcesPath, pageUrl) {
           responseType: 'arraybuffer',
         })
           .then(({ data }) => {
-            log(`Saving file ${filepath}`);
+            log(`Saving file to ${filepath}`);
             return fsp.writeFile(filepath, data);
           })
           .catch((e) => handleError(e))
@@ -59,11 +61,6 @@ function loadResources(resourcesLinks, resourcesPath, pageUrl) {
 
         return { title: newLink, task: () => task };
       }),
-    {
-      concurrent: true,
-      renderer: isDebugEnv ? 'silent' : 'default',
-      exitOnError: false,
-    },
   );
 
   return Promise.resolve([])

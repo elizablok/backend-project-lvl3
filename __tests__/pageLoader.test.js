@@ -65,11 +65,14 @@ test('loaded picture', async () => {
 describe('Should trow errors', () => {
   test('Http errors', async () => {
     nock('https://foo.bar.baz')
+      .get(/no-response/)
+      .replyWithError('Wrong url')
       .get(/404/)
       .reply(404)
       .get(/500/)
       .reply(500);
 
+    await expect(loadPage('https://foo.bar.baz/no-response', receivedDirname)).rejects.toThrow('The request was made at https://foo.bar.baz/no-response but no response was received');
     await expect(loadPage('https://foo.bar.baz/404', receivedDirname)).rejects.toThrow('\'https://foo.bar.baz/404\' request failed with status code 404');
     await expect(loadPage('https://foo.bar.baz/500', receivedDirname)).rejects.toThrow('\'https://foo.bar.baz/500\' request failed with status code 500');
   });
