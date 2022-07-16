@@ -8,13 +8,13 @@ const prettifyName = (filepath) => filepath
   .replace(/[^a-z\d]/gi, '-');
 
 const mappingDataName = {
-  page: (pathname) => `${prettifyName(pathname)}.html`,
-  file: (pathname) => {
-    const { dir, name, ext } = path.parse(pathname);
+  page: (filepath) => `${prettifyName(filepath)}.html`,
+  file: (filepath) => {
+    const { dir, name, ext } = path.parse(filepath);
     const newExt = ext === '' ? '.html' : ext;
     return `${prettifyName(getPath(dir, name))}${newExt}`;
   },
-  folder: (pathname) => `${prettifyName(pathname)}_files`,
+  folder: (filepath) => `${prettifyName(filepath)}_files`,
 };
 
 export const getDataName = (url, dataType) => {
