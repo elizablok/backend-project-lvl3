@@ -1,5 +1,6 @@
 import axios from 'axios';
 import fsp from 'fs/promises';
+import process from 'process';
 import path from 'path';
 import debug from 'debug';
 import axiosDebug from 'axios-debug-log';
@@ -75,7 +76,7 @@ function adaptHtmlPage(htmlPagePath, resourcesToLocalize) {
     .then((normalized) => fsp.writeFile(htmlPagePath, `${normalized}`));
 }
 
-function loadPage(pageUrl, outputDirname) {
+function loadPage(pageUrl, outputDirname = process.cwd()) {
   const htmlPageName = getDataName(pageUrl, 'page');
   const htmlPagePath = getPath(outputDirname, htmlPageName);
   const resourcesDirname = getDataName(pageUrl, 'folder');
