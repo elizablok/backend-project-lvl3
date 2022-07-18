@@ -10,7 +10,7 @@ function hasSameDomain(url, newUrl) {
 export function localizeLinks(content, resourcesToLocalize) {
   const $ = cheerio.load(content);
   tags.forEach((tag) => {
-    $(tag).each(function () {
+    $(tag).each(function a() {
       resourcesToLocalize.forEach(([link, filepath]) => {
         const tagAttr = tagAttrs.filter((el) => $(this).attr(el)).join('');
         if ($(this).attr(tagAttr) === link) {
@@ -25,11 +25,12 @@ export function localizeLinks(content, resourcesToLocalize) {
 export function getResourcesLinks(content, url) {
   const $ = cheerio.load(content);
   const res = tags.reduce((acc, tag) => {
-    const tagLinks = $(tag).map(function () {
+    const tagLinks = $(tag).map(function a() {
       const tagAttr = tagAttrs.filter((el) => $(this).attr(el)).join('');
       if (tagAttr === '') {
         return;
       }
+      // eslint-disable-next-line consistent-return
       return $(this).attr(tagAttr);
     }).toArray().filter((el) => hasSameDomain(url, new URL(el, url).href));
     acc.push(...tagLinks);
@@ -40,6 +41,7 @@ export function getResourcesLinks(content, url) {
 
 export function normalizeHtml(content) {
   return content
-    .replace(/\s{0,5}\n<\/body><\/html>/g, '\n  <\/body>\n<\/html>')
+    // eslint-disable-next-line consistent-return
+    .replace(/\s{0,5}\n<\/body><\/html>/g, '\n  </body>\n</html>')
     .replace(/<head>/g, '\n  <head>');
 }
