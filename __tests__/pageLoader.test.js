@@ -37,7 +37,7 @@ beforeEach(async () => {
   receivedDirname = await fsp.mkdtemp(path.join(os.tmpdir(), 'page-loader-'));
 });
 
-test('loaded picture', async () => {
+test('loaded content', async () => {
   nock('https://ru.hexlet.io')
     .get('/courses')
     .reply(200, expectedResources.html)
@@ -62,7 +62,7 @@ test('loaded picture', async () => {
   expect(receivedJs).toEqual(expectedResources.js);
 });
 
-describe('Should trow errors', () => {
+describe('throwed http errors', () => {
   test('Http errors', async () => {
     nock('https://foo.bar.baz')
       .get(/no-response/)
@@ -77,7 +77,7 @@ describe('Should trow errors', () => {
     await expect(loadPage('https://foo.bar.baz/500', receivedDirname)).rejects.toThrow('\'https://foo.bar.baz/500\' request failed with status code 500');
   });
 
-  test('Fs errors', async () => {
+  test('throwed fs errors', async () => {
     nock(/example.com/)
       .get('/')
       .twice()

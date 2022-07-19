@@ -10,7 +10,7 @@ import { getResourcesLinks, localizeLinks, normalizeHtml } from './pageProcessor
 
 const log = debug('page-loader');
 
-function handleError(e) {
+const handleError = (e) => {
   if (e.isAxiosError) {
     if (e.response) {
       throw new Error(`'${e.config.url}' request failed with status code ${e.response.status}`);
@@ -18,7 +18,7 @@ function handleError(e) {
     throw new Error(`The request was made at ${e.config.url} but no response was received`);
   }
   throw e;
-}
+};
 
 axiosDebug({
   request(httpDebug, config) {
@@ -32,13 +32,11 @@ axiosDebug({
   },
 });
 
-function loadHtmlPage(url, outputPath) {
-  return axios.get(url)
-    .then(({ data }) => fsp.writeFile(outputPath, `${data}`))
-    .catch((e) => handleError(e));
-}
+const loadHtmlPage = (url, outputPath) => axios.get(url)
+  .then(({ data }) => fsp.writeFile(outputPath, `${data}`))
+  .catch((e) => handleError(e));
 
-function loadResources(resourcesLinks, resourcesPath, pageUrl) {
+const loadResources = (resourcesLinks, resourcesPath, pageUrl) => {
   const resourcesToLocalize = [];
   const resourcesDirname = path.basename(resourcesPath);
   const tasks = new Listr(
@@ -57,43 +55,45 @@ function loadResources(resourcesLinks, resourcesPath, pageUrl) {
             log(`Saving file to ${filepath}`);
             return fsp.writeFile(filepath, data);
           })
-          .catch((e) => handleError(e))
-          .then(() => resourcesToLocalize.push([link, relativePath]));
+          .catch((e) => handleError(e));
 
+        resourcesToLocalize.push([link, relativePath]);
         return { title: newLink, task: () => task };
       }),
   );
 
-  return Promise.resolve([])
-    .then(() => tasks.run())
+  return tasks.run()
     .then(() => resourcesToLocalize);
-}
+};
 
-function adaptHtmlPage(htmlPagePath, resourcesToLocalize) {
-  return fsp.readFile(htmlPagePath, 'utf-8')
-    .then((content) => localizeLinks(content, resourcesToLocalize))
-    .then((localized) => normalizeHtml(localized))
-    .then((normalized) => fsp.writeFile(htmlPagePath, `${normalized}`));
-}
+const adaptHtmlPage = (htmlPagePath, resourcesToLocalize) => fsp.readFile(htmlPagePath, 'utf-8')
+  .then((content) => {
+    const localized = localizeLinks(content, resourcesToLocalize);
+    return normalizeHtml(localized);
+  })
+  .then((newContent) => fsp.writeFile(htmlPagePath, `${newContent}`));
 
-function loadPage(pageUrl, outputDirname = cwd()) {
+const loadPage = (pageUrl, outputDirname = cwd()) => {
   const htmlPageName = getDataName(pageUrl, 'page');
   const htmlPagePath = getPath(outputDirname, htmlPageName);
   const resourcesDirname = getDataName(pageUrl, 'folder');
   const resourcesPath = getPath(outputDirname, resourcesDirname);
   return loadHtmlPage(pageUrl, htmlPagePath)
-    .then(() => log(`Saved the page to ${htmlPagePath}`))
-    .then(() => fsp.mkdir(resourcesPath, { recursive: true }))
+    .then(() => {
+      log(`Saved the page to ${htmlPagePath}`);
+      return fsp.mkdir(resourcesPath, { recursive: true });
+    })
     .then(() => fsp.readFile(htmlPagePath, 'utf8'))
-    .then((content) => getResourcesLinks(content, pageUrl))
-    .then((resourcesLinks) => loadResources(resourcesLinks, resourcesPath, pageUrl))
+    .then((content) => {
+      const resourcesLinks = getResourcesLinks(content, pageUrl);
+      return loadResources(resourcesLinks, resourcesPath, pageUrl);
+    })
     .then((resourcesToLocalize) => {
       log(`Saved files to ${resourcesPath}`);
-      return resourcesToLocalize;
+      return adaptHtmlPage(htmlPagePath, resourcesToLocalize);
     })
-    .then((resourcesToLocalize) => adaptHtmlPage(htmlPagePath, resourcesToLocalize))
     .then(() => `${htmlPagePath}`)
     .catch((e) => handleError(e));
-}
+};
 
 export default loadPage;
