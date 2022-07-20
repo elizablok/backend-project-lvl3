@@ -45,4 +45,4 @@ Options:
 [![asciicast](https://asciinema.org/a/508981.svg)](https://asciinema.org/a/508981)
 
 ### Error handling and logging
-[![asciicast](https://asciinema.org/a/508983.svg)](https://asciinema.org/a/508983)
+[![asciicast](https://asciinema.org/a/509811.svg)](https://asciinema.org/a/509811)

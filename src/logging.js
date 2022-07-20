@@ -3,9 +3,10 @@ import { cwd } from 'process';
 import path from 'path';
 import debug from 'debug';
 
+const loggerPath = path.join(cwd(), 'logger.log');
+
 const recordLog = (data) => {
-  const loggerPath = path.join(cwd(), 'logger.log');
-  const logRecord = `${data}\n\n`;
+  const logRecord = `${new Date().toUTCString()} ${data}\n\n`;
   return fs.appendFile(loggerPath, logRecord);
 };
 
@@ -18,8 +19,10 @@ const log = (namespace, message, record = message) => {
   if (namespace === 'error') {
     return recordLog(record);
   }
+
+  const fullMessage = `${message}. Open ${loggerPath} for details`;
   return recordLog(record)
-    .then(() => mappingNamespace[namespace](message));
+    .then(() => mappingNamespace[namespace](fullMessage));
 };
 
 export default log;

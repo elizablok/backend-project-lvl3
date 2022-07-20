@@ -40,7 +40,7 @@ const getNetworkMessage = (e) => {
   }
 };
 
-const getSystemLogRecord = (e, message) => `${Date.now()} ${message}: ${e}`;
+const getSystemLogRecord = (e, message) => `${message}: ${e}`;
 const getNetworkLogRecord = (e, message) => {
   const requestBody = `${e.config.method} ${e.config.url} / HTTP/1.1
   Host: ${e.request.host}
@@ -50,7 +50,7 @@ const getNetworkLogRecord = (e, message) => {
 
   if (!e.response) {
     const noResponseHttpMessage = `${requestBody}\nReceived no http response`;
-    return `${Date.now()} ${message}: ${noResponseHttpMessage}`;
+    return `${message}: ${noResponseHttpMessage}`;
   }
 
   const responseBody = `HTTP/1.1 ${e.response.status} ${e.response.statustext}
@@ -61,7 +61,7 @@ const getNetworkLogRecord = (e, message) => {
   Content-Type: ${e.response.headers['content-type']}`;
 
   const httpMessage = `${requestBody}\n${responseBody}`;
-  return `${Date.now()} ${message}: ${httpMessage}`;
+  return `${message}: ${httpMessage}`;
 };
 
 const systemErrorHandler = (e, namespace) => {
