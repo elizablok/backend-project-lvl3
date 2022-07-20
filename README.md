@@ -4,6 +4,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/a884ea4306f200c315df/maintainability)](https://codeclimate.com/github/elizablok/backend-project-lvl3/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/a884ea4306f200c315df/test_coverage)](https://codeclimate.com/github/elizablok/backend-project-lvl3/test_coverage)
 
+![итог_иконкиииии2_Монтажная_область_1_Монтажная_область_1](https://user-images.githubusercontent.com/98037488/179986747-07a48201-3b0c-4f5c-9080-63854cfe30db.png)
+
 ## About Page Loader
 Page Loader is an utility for downloading a page and its resources. This project was created as part of the [Hexlet](https://ru.hexlet.io/) course.
 
