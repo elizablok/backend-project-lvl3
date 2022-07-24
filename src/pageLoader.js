@@ -28,8 +28,8 @@ const loadHtmlPage = (url, outputPath) => axios.get(url)
 const loadResources = (resourcesLinks, resourcesPath, pageUrl) => {
   const hasNoResources = resourcesLinks.length === 0;
   if (hasNoResources) {
-    return log('error', 'Page has no resources to download')
-      .then(() => []);
+    log('error', 'Page has no resources to download');
+    return [];
   }
   const resourcesToLocalize = [];
   const resourcesDirname = path.basename(resourcesPath);
@@ -46,10 +46,8 @@ const loadResources = (resourcesLinks, resourcesPath, pageUrl) => {
           responseType: 'arraybuffer',
         })
           .then(({ data }) => fsp.writeFile(filepath, data))
-          .then(() => log('info', `Saving file to ${filepath}`))
           .then(() => resourcesToLocalize.push([link, relativePath]))
           .catch((e) => handleError(e, 'error'));
-
         return { title: newLink, task: () => task };
       }),
   );
@@ -61,9 +59,9 @@ const loadResources = (resourcesLinks, resourcesPath, pageUrl) => {
 const adaptHtmlPage = (htmlPagePath, resourcesToLocalize) => fsp.readFile(htmlPagePath, 'utf-8')
   .then((content) => {
     const localized = localizeLinks(content, resourcesToLocalize);
-    return normalizeHtml(localized);
-  })
-  .then((newContent) => fsp.writeFile(htmlPagePath, `${newContent}`));
+    const normalized = normalizeHtml(localized);
+    return fsp.writeFile(htmlPagePath, `${normalized}`);
+  });
 
 const loadPage = (pageUrl, outputDirname = cwd()) => {
   const htmlPageName = getDataName(pageUrl, 'page');
@@ -71,15 +69,19 @@ const loadPage = (pageUrl, outputDirname = cwd()) => {
   const resourcesDirname = getDataName(pageUrl, 'folder');
   const resourcesPath = getPath(outputDirname, resourcesDirname);
   return loadHtmlPage(pageUrl, htmlPagePath)
-    .then(() => log('info', `Saved the page ${pageUrl} to ${htmlPagePath}`))
-    .then(() => fsp.mkdir(resourcesPath, { recursive: true }))
+    .then(() => {
+      log('info', `Saved the page ${pageUrl} to ${htmlPagePath}`);
+      return fsp.mkdir(resourcesPath, { recursive: true });
+    })
     .then(() => fsp.readFile(htmlPagePath, 'utf8'))
     .then((content) => {
       const resourcesLinks = getResourcesLinks(content, pageUrl);
       return loadResources(resourcesLinks, resourcesPath, pageUrl);
     })
-    .then((resourcesToLocalize) => adaptHtmlPage(htmlPagePath, resourcesToLocalize))
-    .then(() => log('info', `Saved files to ${resourcesPath}`))
+    .then((resourcesToLocalize) => {
+      log('info', `Saved files to ${resourcesPath}`);
+      return adaptHtmlPage(htmlPagePath, resourcesToLocalize);
+    })
     .then(() => `${htmlPagePath}`);
 };
 
