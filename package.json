@@ -1,8 +1,8 @@
 {
-  "name": "@hexlet/code",
+  "name": "page-loader",
   "version": "1.0.0",
   "type": "module",
-  "description": "[![Actions Status](https://github.com/elizablok/backend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/elizablok/backend-project-lvl3/actions)",
+  "description": "Page Loader",
   "main": "index.js",
   "bin": {
     "page-loader": "bin/page-loader.js"
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/elizablok/backend-project-lvl3.git"
+    "url": "git+https://github.com/elizablok/page-loader.git"
   },
   "author": "elizablok",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/elizablok/backend-project-lvl3/issues"
+    "url": "https://github.com/elizablok/page-loader/issues"
   },
-  "homepage": "https://github.com/elizablok/backend-project-lvl3#readme",
+  "homepage": "https://github.com/elizablok/page-loader#readme",
   "dependencies": {
     "axios": "^0.27.2",
     "axios-debug-log": "^0.8.4",

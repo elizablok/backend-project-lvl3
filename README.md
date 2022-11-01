@@ -1,7 +1,7 @@
 ### Maintainability, test coverage statuses and tests:
-[![Tests](https://github.com/elizablok/backend-project-lvl3/actions/workflows/node-ci.yml/badge.svg)](https://github.com/elizablok/backend-project-lvl3/actions/workflows/node-ci.yml)
-[![Maintainability](https://api.codeclimate.com/v1/badges/a884ea4306f200c315df/maintainability)](https://codeclimate.com/github/elizablok/backend-project-lvl3/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/a884ea4306f200c315df/test_coverage)](https://codeclimate.com/github/elizablok/backend-project-lvl3/test_coverage)
+[![Tests](https://github.com/elizablok/page-loader/actions/workflows/node-ci.yml/badge.svg)](https://github.com/elizablok/page-loader/actions/workflows/node-ci.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/a884ea4306f200c315df/maintainability)](https://codeclimate.com/github/elizablok/page-loader/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/a884ea4306f200c315df/test_coverage)](https://codeclimate.com/github/elizablok/page-loader/test_coverage)
 
 ![итог_иконкиииии2_Монтажная_область_1_Монтажная_область_1](https://user-images.githubusercontent.com/98037488/179986747-07a48201-3b0c-4f5c-9080-63854cfe30db.png)
 
@@ -19,7 +19,7 @@ Features:
 ## Getting started
 - Clone the repository
 ```cmd
-git clone git@github.com:elizablok/backend-project-lvl3.git
+git clone git@github.com:elizablok/page-loader.git
 ```
 - Install dependencies
 ```cmd
